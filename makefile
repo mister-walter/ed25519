@@ -40,8 +40,12 @@ key_exchange.o:
 test: fe.o ge.o keypair.o add_scalar.o sc.o seed.o sha512.o sign.o verify.o key_exchange.o
 	$(CC) -o $(BINDIR)/test test.c $(BUILDDIR)/fe.o $(BUILDDIR)/ge.o $(BUILDDIR)/keypair.o $(BUILDDIR)/add_scalar.o $(BUILDDIR)/sc.o $(BUILDDIR)/seed.o $(BUILDDIR)/sha512.o $(BUILDDIR)/sign.o $(BUILDDIR)/verify.o $(BUILDDIR)/key_exchange.o -I src/ -I build/
 
-library:
+library: fe.o ge.o keypair.o add_scalar.o sc.o seed.o sha512.o sign.o verify.o key_exchange.o
 	$(CC) -shared -Wl,-soname,ed25519.so.1 -o $(BUILDDIR)/ed25519.so.1 $(BUILDDIR)/*.o
+
+install: library
+	cp $(BUILDDIR)/ed25519.so.1 /usr/lib/
+	cp $(SRCDIR)/ed25519.h /usr/include/
 
 clean: 
 	rm -f $(BINDIR)/*
